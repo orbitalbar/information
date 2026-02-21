@@ -23,18 +23,17 @@ body{
     overflow-x:hidden;
 }
 
-/* ================= GALAXY BACKGROUND ================= */
+/* ===== FIX GALAXY BACKGROUND (NO SCROLL MOVE) ===== */
 
-.parallax-bg{
+.galaxy{
     position:fixed;
     width:100%;
-    height:120%;
+    height:100%;
     background:
         radial-gradient(circle at 20% 30%, #3a1c71, transparent 40%),
         radial-gradient(circle at 80% 70%, #1e3c72, transparent 40%),
         radial-gradient(circle at 50% 50%, #000428, #000000 80%);
     z-index:-4;
-    transform:translateY(0);
 }
 
 .stars{
@@ -52,7 +51,7 @@ body{
     to{transform:translate(-1000px,-1000px);}
 }
 
-/* ================= FLOATING PLANET ================= */
+/* ===== FLOATING PLANET ===== */
 
 .planet{
     position:fixed;
@@ -72,7 +71,7 @@ body{
     50%{transform:translateY(-25px);}
 }
 
-/* ================= FLOATING CHOCOLATES ================= */
+/* ===== FLOATING CHOCOLATES ===== */
 
 .floating-chocolates{
     position:fixed;
@@ -103,14 +102,14 @@ body{
     to{ transform:translateY(-120vh) rotate(360deg);}
 }
 
-/* ================= HERO ================= */
+/* ===== HERO ===== */
 
 .hero{
     text-align:center;
     padding:150px 20px 100px;
 }
 
-.hero img{
+.hero a img{
     width:90%;
     max-width:600px;
     border-radius:30px;
@@ -118,7 +117,7 @@ body{
     transition:transform 0.3s ease;
 }
 
-.hero img:hover{
+.hero a img:hover{
     transform:rotateY(15deg) rotateX(5deg) scale(1.05);
 }
 
@@ -137,7 +136,7 @@ h1{
     to{ text-shadow:0 0 60px rgba(255,215,0,1);}
 }
 
-/* ================= SECTIONS ================= */
+/* ===== SECTIONS ===== */
 
 .section{
     max-width:1000px;
@@ -169,7 +168,7 @@ h1{
     font-size:1.15rem;
 }
 
-/* ================= FOOTER ================= */
+/* ===== FOOTER ===== */
 
 footer{
     text-align:center;
@@ -182,7 +181,7 @@ footer{
 
 <body>
 
-<div class="parallax-bg"></div>
+<div class="galaxy"></div>
 <div class="stars"></div>
 <div class="planet"></div>
 
@@ -195,7 +194,9 @@ footer{
 </div>
 
 <div class="hero">
-    <img src="Orbital bar idea.png" alt="Orbital Bar">
+    <a href="https://discord.gg/zmPAwS2QKH" target="_blank" rel="noopener">
+        <img src="Orbital bar idea.png" alt="Join Discord">
+    </a>
     <h1>Orbital Bar</h1>
 </div>
 
@@ -229,7 +230,7 @@ footer{
 
 <script>
 
-/* Scroll reveal */
+/* Scroll reveal only */
 
 const sections = document.querySelectorAll(".section");
 
@@ -243,15 +244,6 @@ const observer = new IntersectionObserver(entries=>{
 
 sections.forEach(section=>{
     observer.observe(section);
-});
-
-/* Parallax */
-
-const bg = document.querySelector(".parallax-bg");
-
-window.addEventListener("scroll",()=>{
-    let scroll = window.scrollY;
-    bg.style.transform = "translateY(" + scroll * 0.3 + "px)";
 });
 
 </script>
