@@ -8,30 +8,34 @@
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
+
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
+    scroll-behavior:smooth;
 }
 
 body{
     font-family:'Poppins',sans-serif;
-    color:white;
     background:black;
+    color:white;
     overflow-x:hidden;
 }
 
-/* === GALAXY BACKGROUND === */
+/* PARALLAX GALAXY */
 
-.galaxy{
+.parallax-bg{
     position:fixed;
     width:100%;
-    height:100%;
+    height:120%;
     background:
         radial-gradient(circle at 20% 30%, #3a1c71, transparent 40%),
         radial-gradient(circle at 80% 70%, #1e3c72, transparent 40%),
         radial-gradient(circle at 50% 50%, #000428, #000000 80%);
     z-index:-3;
+    transform:translateY(0);
+    transition:transform 0.1s linear;
 }
 
 .stars{
@@ -40,35 +44,52 @@ body{
     height:200%;
     background:url("https://www.transparenttextures.com/patterns/stardust.png");
     animation: moveStars 200s linear infinite;
-    opacity:0.5;
+    opacity:0.3;
     z-index:-2;
 }
 
 @keyframes moveStars{
-    from{ transform:translate(0,0);}
-    to{ transform:translate(-800px,-800px);}
+    from{transform:translate(0,0);}
+    to{transform:translate(-1000px,-1000px);}
 }
 
-/* === HERO SECTION === */
+/* FLOATING PLANET */
+
+.planet{
+    position:fixed;
+    top:10%;
+    right:5%;
+    width:150px;
+    height:150px;
+    background:radial-gradient(circle at 30% 30%, #ffd700, #a67c00);
+    border-radius:50%;
+    box-shadow:0 0 40px rgba(255,215,0,0.8);
+    animation: float 6s ease-in-out infinite;
+    z-index:-1;
+}
+
+@keyframes float{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-20px);}
+}
+
+/* HERO */
 
 .hero{
     text-align:center;
-    padding:140px 20px 100px 20px;
-    position:relative;
+    padding:150px 20px 100px;
 }
 
 .hero img{
     width:90%;
     max-width:600px;
     border-radius:30px;
-    box-shadow:0 0 80px rgba(255,215,0,0.6);
-    animation: float 6s ease-in-out infinite;
+    transition:transform 0.3s ease;
+    box-shadow:0 0 60px rgba(255,215,0,0.6);
 }
 
-@keyframes float{
-    0%{ transform:translateY(0);}
-    50%{ transform:translateY(-15px);}
-    100%{ transform:translateY(0);}
+.hero img:hover{
+    transform:rotateY(15deg) rotateX(5deg) scale(1.05);
 }
 
 h1{
@@ -78,39 +99,24 @@ h1{
     background:linear-gradient(90deg,#ffd700,#ffffff,#ffd700);
     -webkit-background-clip:text;
     -webkit-text-fill-color:transparent;
-    text-shadow:0 0 40px rgba(255,215,0,0.8);
-    position:relative;
+    animation: glow 3s ease-in-out infinite alternate;
 }
 
-/* Orbit Ring Around Title */
-
-h1::after{
-    content:"";
-    position:absolute;
-    width:120%;
-    height:120%;
-    border:3px solid rgba(255,215,0,0.6);
-    border-radius:50%;
-    top:-10%;
-    left:-10%;
-    animation: rotateOrbit 12s linear infinite;
+@keyframes glow{
+    from{ text-shadow:0 0 20px rgba(255,215,0,0.6);}
+    to{ text-shadow:0 0 50px rgba(255,215,0,1);}
 }
 
-@keyframes rotateOrbit{
-    from{ transform:rotate(0deg);}
-    to{ transform:rotate(360deg);}
-}
-
-/* === CONTENT SECTIONS === */
+/* SECTIONS */
 
 .section{
     max-width:1000px;
-    margin:160px auto;
+    margin:150px auto;
     padding:60px;
     background:rgba(0,0,0,0.6);
-    backdrop-filter:blur(12px);
+    backdrop-filter:blur(15px);
     border-radius:30px;
-    box-shadow:0 0 60px rgba(0,0,0,0.9);
+    box-shadow:0 0 60px rgba(0,0,0,0.8);
     opacity:0;
     transform:translateY(100px);
     transition:all 1.2s ease;
@@ -123,30 +129,22 @@ h1::after{
 
 .section h2{
     font-family:'Orbitron',sans-serif;
-    margin-bottom:30px;
     color:#ffd700;
+    margin-bottom:25px;
     font-size:2.2rem;
 }
 
 .section p{
-    font-size:1.15rem;
     line-height:1.9;
+    font-size:1.15rem;
 }
 
-/* === FOOTER === */
+/* FOOTER */
 
 footer{
     text-align:center;
-    padding:100px 0 60px 0;
+    padding:80px 0;
     opacity:0.6;
-}
-
-/* === PARALLAX SCROLL EFFECT === */
-
-.parallax{
-    position:relative;
-    transform:translateZ(0);
-    will-change:transform;
 }
 
 </style>
@@ -154,10 +152,11 @@ footer{
 
 <body>
 
-<div class="galaxy"></div>
+<div class="parallax-bg"></div>
 <div class="stars"></div>
+<div class="planet"></div>
 
-<div class="hero parallax">
+<div class="hero">
     <img src="Orbital bar idea.png" alt="Orbital Bar">
     <h1>Orbital Bar</h1>
 </div>
@@ -165,26 +164,24 @@ footer{
 <div class="section">
     <h2>Cosmic Chocolate Experience</h2>
     <p>
-        Orbital Bar combines smooth milk chocolate, airy nougat,
-        and flowing caramel into one luxurious space-inspired creation.
+        A smooth milk chocolate shell embraces airy nougat and flowing caramel.
+        Each bite feels like drifting through a golden galaxy.
     </p>
 </div>
 
 <div class="section">
-    <h2>Flavor Identity</h2>
+    <h2>Flavor Architecture</h2>
     <p>
-        Creamy coating, soft whipped center,
-        and silky caramel core — perfectly balanced sweetness
-        crafted for a premium chocolate experience.
+        Balanced sweetness, creamy texture, and a dynamic core —
+        engineered like a perfect planetary orbit.
     </p>
 </div>
 
 <div class="section">
-    <h2>Brand Vision</h2>
+    <h2>Brand Universe</h2>
     <p>
-        Inspired by galaxies and planetary motion,
-        Orbital Bar represents a journey beyond ordinary chocolate.
-        Bold. Modern. Cosmic.
+        Orbital Bar is not just chocolate.
+        It’s a premium cosmic experience designed for dreamers.
     </p>
 </div>
 
@@ -194,28 +191,29 @@ footer{
 
 <script>
 
-/* Scroll Reveal */
+/* Scroll reveal */
 
 const sections = document.querySelectorAll(".section");
 
-const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
+const observer = new IntersectionObserver(entries=>{
+    entries.forEach(entry=>{
         if(entry.isIntersecting){
             entry.target.classList.add("show");
         }
     });
-},{ threshold:0.25 });
+},{threshold:0.25});
 
-sections.forEach(section => observer.observe(section));
+sections.forEach(section=>{
+    observer.observe(section);
+});
 
-/* Parallax Effect */
+/* Parallax effect */
 
-window.addEventListener("scroll", () => {
-    const scrollY = window.scrollY;
-    document.querySelector(".stars").style.transform =
-        "translateY(" + scrollY * 0.2 + "px)";
-    document.querySelector(".galaxy").style.transform =
-        "translateY(" + scrollY * 0.1 + "px)";
+const bg = document.querySelector(".parallax-bg");
+
+window.addEventListener("scroll",()=>{
+    let scroll = window.scrollY;
+    bg.style.transform = "translateY(" + scroll * 0.3 + "px)";
 });
 
 </script>
