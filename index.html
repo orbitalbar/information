@@ -23,7 +23,7 @@ body{
     overflow-x:hidden;
 }
 
-/* PARALLAX GALAXY */
+/* ================= GALAXY BACKGROUND ================= */
 
 .parallax-bg{
     position:fixed;
@@ -33,9 +33,8 @@ body{
         radial-gradient(circle at 20% 30%, #3a1c71, transparent 40%),
         radial-gradient(circle at 80% 70%, #1e3c72, transparent 40%),
         radial-gradient(circle at 50% 50%, #000428, #000000 80%);
-    z-index:-3;
+    z-index:-4;
     transform:translateY(0);
-    transition:transform 0.1s linear;
 }
 
 .stars{
@@ -45,7 +44,7 @@ body{
     background:url("https://www.transparenttextures.com/patterns/stardust.png");
     animation: moveStars 200s linear infinite;
     opacity:0.3;
-    z-index:-2;
+    z-index:-3;
 }
 
 @keyframes moveStars{
@@ -53,27 +52,58 @@ body{
     to{transform:translate(-1000px,-1000px);}
 }
 
-/* FLOATING PLANET */
+/* ================= FLOATING PLANET ================= */
 
 .planet{
     position:fixed;
     top:10%;
     right:5%;
-    width:150px;
-    height:150px;
+    width:160px;
+    height:160px;
     background:radial-gradient(circle at 30% 30%, #ffd700, #a67c00);
     border-radius:50%;
-    box-shadow:0 0 40px rgba(255,215,0,0.8);
+    box-shadow:0 0 60px rgba(255,215,0,0.9);
     animation: float 6s ease-in-out infinite;
-    z-index:-1;
+    z-index:-2;
 }
 
 @keyframes float{
     0%,100%{transform:translateY(0);}
-    50%{transform:translateY(-20px);}
+    50%{transform:translateY(-25px);}
 }
 
-/* HERO */
+/* ================= FLOATING CHOCOLATES ================= */
+
+.floating-chocolates{
+    position:fixed;
+    width:100%;
+    height:100%;
+    top:0;
+    left:0;
+    pointer-events:none;
+    z-index:-1;
+}
+
+.choco{
+    position:absolute;
+    width:120px;
+    opacity:0.85;
+    filter:drop-shadow(0 0 25px rgba(255,215,0,0.7));
+    animation: drift linear infinite;
+}
+
+.c1{ top:15%; left:10%; animation-duration: 30s; transform:scale(0.8);}
+.c2{ top:60%; left:80%; animation-duration: 40s; transform:scale(1.1);}
+.c3{ top:40%; left:20%; animation-duration: 35s; transform:scale(0.6);}
+.c4{ top:75%; left:40%; animation-duration: 45s; transform:scale(1);}
+.c5{ top:25%; left:70%; animation-duration: 38s; transform:scale(0.9);}
+
+@keyframes drift{
+    from{ transform:translateY(0) rotate(0deg);}
+    to{ transform:translateY(-120vh) rotate(360deg);}
+}
+
+/* ================= HERO ================= */
 
 .hero{
     text-align:center;
@@ -84,8 +114,8 @@ body{
     width:90%;
     max-width:600px;
     border-radius:30px;
+    box-shadow:0 0 70px rgba(255,215,0,0.8);
     transition:transform 0.3s ease;
-    box-shadow:0 0 60px rgba(255,215,0,0.6);
 }
 
 .hero img:hover{
@@ -104,10 +134,10 @@ h1{
 
 @keyframes glow{
     from{ text-shadow:0 0 20px rgba(255,215,0,0.6);}
-    to{ text-shadow:0 0 50px rgba(255,215,0,1);}
+    to{ text-shadow:0 0 60px rgba(255,215,0,1);}
 }
 
-/* SECTIONS */
+/* ================= SECTIONS ================= */
 
 .section{
     max-width:1000px;
@@ -139,7 +169,7 @@ h1{
     font-size:1.15rem;
 }
 
-/* FOOTER */
+/* ================= FOOTER ================= */
 
 footer{
     text-align:center;
@@ -156,6 +186,14 @@ footer{
 <div class="stars"></div>
 <div class="planet"></div>
 
+<div class="floating-chocolates">
+    <img src="Orbital bar idea.png" class="choco c1">
+    <img src="Orbital bar idea.png" class="choco c2">
+    <img src="Orbital bar idea.png" class="choco c3">
+    <img src="Orbital bar idea.png" class="choco c4">
+    <img src="Orbital bar idea.png" class="choco c5">
+</div>
+
 <div class="hero">
     <img src="Orbital bar idea.png" alt="Orbital Bar">
     <h1>Orbital Bar</h1>
@@ -164,24 +202,24 @@ footer{
 <div class="section">
     <h2>Cosmic Chocolate Experience</h2>
     <p>
-        A smooth milk chocolate shell embraces airy nougat and flowing caramel.
-        Each bite feels like drifting through a golden galaxy.
+        Smooth milk chocolate surrounds airy nougat and flowing caramel,
+        delivering a truly cosmic taste journey.
     </p>
 </div>
 
 <div class="section">
     <h2>Flavor Architecture</h2>
     <p>
-        Balanced sweetness, creamy texture, and a dynamic core —
-        engineered like a perfect planetary orbit.
+        Every layer is designed like a planetary orbit —
+        balanced, smooth, and irresistibly satisfying.
     </p>
 </div>
 
 <div class="section">
     <h2>Brand Universe</h2>
     <p>
-        Orbital Bar is not just chocolate.
-        It’s a premium cosmic experience designed for dreamers.
+        Orbital Bar represents more than chocolate.
+        It is a premium galactic experience.
     </p>
 </div>
 
@@ -207,7 +245,7 @@ sections.forEach(section=>{
     observer.observe(section);
 });
 
-/* Parallax effect */
+/* Parallax */
 
 const bg = document.querySelector(".parallax-bg");
 
