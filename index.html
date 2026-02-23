@@ -1,251 +1,173 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hu">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Orbital Bar – Explore the Sweet Universe</title>
+<title>Orbital Chocolate</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
 <style>
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    scroll-behavior:smooth;
+body {
+  margin:0;
+  overflow-x:hidden;
+  font-family:'Orbitron', sans-serif;
+  background:black;
+  color:white;
 }
 
-body{
-    font-family:'Poppins',sans-serif;
-    background:black;
-    color:white;
-    overflow-x:hidden;
+canvas {
+  position:fixed;
+  top:0;
+  left:0;
+  z-index:-2;
 }
 
-/* ===== FIX GALAXY BACKGROUND (NO SCROLL MOVE) ===== */
-
-.galaxy{
-    position:fixed;
-    width:100%;
-    height:100%;
-    background:
-        radial-gradient(circle at 20% 30%, #3a1c71, transparent 40%),
-        radial-gradient(circle at 80% 70%, #1e3c72, transparent 40%),
-        radial-gradient(circle at 50% 50%, #000428, #000000 80%);
-    z-index:-4;
+.overlay {
+  position:fixed;
+  width:100%;
+  height:100%;
+  backdrop-filter: blur(10px);
+  background: radial-gradient(circle at center, rgba(0,0,0,0.2), rgba(0,0,0,0.9));
+  z-index:-1;
+  transition: opacity 1s ease;
 }
 
-.stars{
-    position:fixed;
-    width:200%;
-    height:200%;
-    background:url("https://www.transparenttextures.com/patterns/stardust.png");
-    animation: moveStars 200s linear infinite;
-    opacity:0.3;
-    z-index:-3;
+.section {
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  text-align:center;
 }
 
-@keyframes moveStars{
-    from{transform:translate(0,0);}
-    to{transform:translate(-1000px,-1000px);}
+h1 {
+  font-size:4rem;
+  background: linear-gradient(90deg,#ff00cc,#3333ff);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
 }
 
-/* ===== FLOATING PLANET ===== */
-
-.planet{
-    position:fixed;
-    top:10%;
-    right:5%;
-    width:160px;
-    height:160px;
-    background:radial-gradient(circle at 30% 30%, #ffd700, #a67c00);
-    border-radius:50%;
-    box-shadow:0 0 60px rgba(255,215,0,0.9);
-    animation: float 6s ease-in-out infinite;
-    z-index:-2;
+.choco-container {
+  position:relative;
+  height:400px;
+  width:100%;
 }
 
-@keyframes float{
-    0%,100%{transform:translateY(0);}
-    50%{transform:translateY(-25px);}
+.choco {
+  position:absolute;
+  width:150px;
+  transition: transform 0.3s ease, filter 0.3s ease;
+  cursor:pointer;
 }
 
-/* ===== FLOATING CHOCOLATES ===== */
-
-.floating-chocolates{
-    position:fixed;
-    width:100%;
-    height:100%;
-    top:0;
-    left:0;
-    pointer-events:none;
-    z-index:-1;
+.choco:hover {
+  transform: scale(1.2) rotate(10deg);
+  filter: drop-shadow(0 0 20px #ff00cc);
 }
 
-.choco{
-    position:absolute;
-    width:120px;
-    opacity:0.85;
-    filter:drop-shadow(0 0 25px rgba(255,215,0,0.7));
-    animation: drift linear infinite;
+.glass {
+  padding:20px 40px;
+  background:rgba(255,255,255,0.1);
+  border-radius:20px;
+  backdrop-filter:blur(20px);
+  border:1px solid rgba(255,255,255,0.2);
+  margin-top:20px;
+  transition:0.5s;
 }
 
-.c1{ top:15%; left:10%; animation-duration: 30s; transform:scale(0.8);}
-.c2{ top:60%; left:80%; animation-duration: 40s; transform:scale(1.1);}
-.c3{ top:40%; left:20%; animation-duration: 35s; transform:scale(0.6);}
-.c4{ top:75%; left:40%; animation-duration: 45s; transform:scale(1);}
-.c5{ top:25%; left:70%; animation-duration: 38s; transform:scale(0.9);}
-
-@keyframes drift{
-    from{ transform:translateY(0) rotate(0deg);}
-    to{ transform:translateY(-120vh) rotate(360deg);}
+.glass:hover {
+  box-shadow:0 0 40px #ff00cc;
 }
-
-/* ===== HERO ===== */
-
-.hero{
-    text-align:center;
-    padding:150px 20px 100px;
-}
-
-.hero a img{
-    width:90%;
-    max-width:600px;
-    border-radius:30px;
-    box-shadow:0 0 70px rgba(255,215,0,0.8);
-    transition:transform 0.3s ease;
-}
-
-.hero a img:hover{
-    transform:rotateY(15deg) rotateX(5deg) scale(1.05);
-}
-
-h1{
-    font-family:'Orbitron',sans-serif;
-    font-size:4.5rem;
-    margin-top:40px;
-    background:linear-gradient(90deg,#ffd700,#ffffff,#ffd700);
-    -webkit-background-clip:text;
-    -webkit-text-fill-color:transparent;
-    animation: glow 3s ease-in-out infinite alternate;
-}
-
-@keyframes glow{
-    from{ text-shadow:0 0 20px rgba(255,215,0,0.6);}
-    to{ text-shadow:0 0 60px rgba(255,215,0,1);}
-}
-
-/* ===== SECTIONS ===== */
-
-.section{
-    max-width:1000px;
-    margin:150px auto;
-    padding:60px;
-    background:rgba(0,0,0,0.6);
-    backdrop-filter:blur(15px);
-    border-radius:30px;
-    box-shadow:0 0 60px rgba(0,0,0,0.8);
-    opacity:0;
-    transform:translateY(100px);
-    transition:all 1.2s ease;
-}
-
-.section.show{
-    opacity:1;
-    transform:translateY(0);
-}
-
-.section h2{
-    font-family:'Orbitron',sans-serif;
-    color:#ffd700;
-    margin-bottom:25px;
-    font-size:2.2rem;
-}
-
-.section p{
-    line-height:1.9;
-    font-size:1.15rem;
-}
-
-/* ===== FOOTER ===== */
-
-footer{
-    text-align:center;
-    padding:80px 0;
-    opacity:0.6;
-}
-
 </style>
 </head>
 
 <body>
 
-<div class="galaxy"></div>
-<div class="stars"></div>
-<div class="planet"></div>
+<canvas id="bg"></canvas>
+<div class="overlay" id="overlay"></div>
 
-<div class="floating-chocolates">
-    <img src="Orbital bar idea.png" class="choco c1">
-    <img src="Orbital bar idea.png" class="choco c2">
-    <img src="Orbital bar idea.png" class="choco c3">
-    <img src="Orbital bar idea.png" class="choco c4">
-    <img src="Orbital bar idea.png" class="choco c5">
-</div>
+<div class="section">
+  <h1>ORBital Chocolate</h1>
+  <div class="glass">A galaxis legcoolabb csokija</div>
 
-<div class="hero">
-    <a href="https://discord.gg/zmPAwS2QKH" target="_blank" rel="noopener">
-        <img src="Orbital bar idea.png" alt="Join Discord">
-    </a>
-    <h1>Orbital Bar</h1>
+  <div class="choco-container">
+    <img src="https://i.imgur.com/3ZQ3Z4C.png" class="choco" id="left" style="left:20%;">
+    <img src="https://i.imgur.com/3ZQ3Z4C.png" class="choco" id="center" style="left:45%;">
+    <img src="https://i.imgur.com/3ZQ3Z4C.png" class="choco" id="right" style="left:70%;">
+  </div>
 </div>
 
 <div class="section">
-    <h2>Cosmic Chocolate Experience</h2>
-    <p>
-        Smooth milk chocolate surrounds airy nougat and flowing caramel,
-        delivering a truly cosmic taste journey.
-    </p>
+  <h1>Warp Into Flavor</h1>
 </div>
-
-<div class="section">
-    <h2>Flavor Architecture</h2>
-    <p>
-        Every layer is designed like a planetary orbit —
-        balanced, smooth, and irresistibly satisfying.
-    </p>
-</div>
-
-<div class="section">
-    <h2>Brand Universe</h2>
-    <p>
-        Orbital Bar represents more than chocolate.
-        It is a premium galactic experience.
-    </p>
-</div>
-
-<footer>
-    © 2026 Orbital Bar – Explore the Sweet Universe
-</footer>
 
 <script>
+// THREE.JS STARFIELD
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({canvas:document.getElementById('bg')});
+renderer.setSize(window.innerWidth, window.innerHeight);
+camera.position.z = 5;
 
-/* Scroll reveal only */
+const starsGeometry = new THREE.BufferGeometry();
+const starCount = 6000;
+const positions = [];
 
-const sections = document.querySelectorAll(".section");
+for(let i=0;i<starCount;i++){
+  positions.push((Math.random()-0.5)*2000);
+  positions.push((Math.random()-0.5)*2000);
+  positions.push((Math.random()-0.5)*2000);
+}
 
-const observer = new IntersectionObserver(entries=>{
-    entries.forEach(entry=>{
-        if(entry.isIntersecting){
-            entry.target.classList.add("show");
-        }
-    });
-},{threshold:0.25});
+starsGeometry.setAttribute('position', new THREE.Float32BufferAttribute(positions,3));
+const starsMaterial = new THREE.PointsMaterial({color:0xffffff});
+const starField = new THREE.Points(starsGeometry,starsMaterial);
+scene.add(starField);
 
-sections.forEach(section=>{
-    observer.observe(section);
+function animate(){
+  requestAnimationFrame(animate);
+  starField.rotation.y += 0.0005;
+  renderer.render(scene,camera);
+}
+animate();
+
+window.addEventListener('resize',()=>{
+  renderer.setSize(window.innerWidth,window.innerHeight);
+  camera.aspect = window.innerWidth/window.innerHeight;
+  camera.updateProjectionMatrix();
 });
 
+// PARALLAX
+document.addEventListener('mousemove',(e)=>{
+  let x = (e.clientX/window.innerWidth-0.5)*2;
+  let y = (e.clientY/window.innerHeight-0.5)*2;
+  gsap.to(".choco",{x:x*50,y:y*50,duration:0.5});
+});
+
+// FLOATING CHOCOS
+gsap.to("#left",{y:-30,repeat:-1,yoyo:true,duration:2});
+gsap.to("#center",{y:-40,repeat:-1,yoyo:true,duration:2.5});
+gsap.to("#right",{y:-35,repeat:-1,yoyo:true,duration:3});
+
+// DISCORD LINK
+document.getElementById("center").addEventListener("click",()=>{
+  gsap.to("#center",{scale:5,opacity:0,duration:0.8});
+  setTimeout(()=>{
+    window.location.href="https://discord.gg/zmPAwS2QKH";
+  },800);
+});
+
+// SCROLL FADE BACKGROUND
+window.addEventListener("scroll",()=>{
+  let scrollY = window.scrollY;
+  let overlay = document.getElementById("overlay");
+  overlay.style.opacity = 1 - scrollY/600;
+});
 </script>
 
 </body>
