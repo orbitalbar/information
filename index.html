@@ -5,169 +5,221 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Orbital Chocolate</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
 <style>
-body {
-  margin:0;
-  overflow-x:hidden;
-  font-family:'Orbitron', sans-serif;
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  font-family:'Orbitron',sans-serif;
   background:black;
+  overflow-x:hidden;
   color:white;
 }
 
-canvas {
+canvas{
   position:fixed;
   top:0;
   left:0;
-  z-index:-2;
+  z-index:-3;
 }
 
-.overlay {
+#overlay{
   position:fixed;
   width:100%;
   height:100%;
-  backdrop-filter: blur(10px);
-  background: radial-gradient(circle at center, rgba(0,0,0,0.2), rgba(0,0,0,0.9));
-  z-index:-1;
-  transition: opacity 1s ease;
+  background:radial-gradient(circle at center,rgba(0,0,0,0.1),rgba(0,0,0,0.95));
+  backdrop-filter:blur(10px);
+  z-index:-2;
+  transition:opacity 1s;
 }
 
-.section {
+.section{
   min-height:100vh;
   display:flex;
+  flex-direction:column;
   align-items:center;
   justify-content:center;
-  flex-direction:column;
   text-align:center;
+  position:relative;
 }
 
-h1 {
+h1{
   font-size:4rem;
-  background: linear-gradient(90deg,#ff00cc,#3333ff);
+  font-weight:900;
+  background:linear-gradient(90deg,#ff00cc,#00ffff,#ffcc00);
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
+  animation: glow 3s infinite alternate;
 }
 
-.choco-container {
-  position:relative;
-  height:400px;
-  width:100%;
+@keyframes glow{
+  from{filter:drop-shadow(0 0 10px #ff00cc);}
+  to{filter:drop-shadow(0 0 30px #00ffff);}
 }
 
-.choco {
-  position:absolute;
-  width:150px;
-  transition: transform 0.3s ease, filter 0.3s ease;
-  cursor:pointer;
-}
-
-.choco:hover {
-  transform: scale(1.2) rotate(10deg);
-  filter: drop-shadow(0 0 20px #ff00cc);
-}
-
-.glass {
+.glass{
+  margin-top:30px;
   padding:20px 40px;
+  border-radius:25px;
   background:rgba(255,255,255,0.1);
-  border-radius:20px;
   backdrop-filter:blur(20px);
   border:1px solid rgba(255,255,255,0.2);
-  margin-top:20px;
   transition:0.5s;
 }
 
-.glass:hover {
-  box-shadow:0 0 40px #ff00cc;
+.glass:hover{
+  box-shadow:0 0 50px #ff00cc;
+  transform:scale(1.05);
+}
+
+.choco-container{
+  position:relative;
+  width:100%;
+  height:400px;
+  margin-top:50px;
+}
+
+.choco{
+  position:absolute;
+  width:160px;
+  cursor:pointer;
+  transition:0.4s;
+}
+
+.choco:hover{
+  transform:scale(1.3) rotate(10deg);
+  filter:drop-shadow(0 0 30px #ff00cc);
+}
+
+#chocoRain{
+  position:fixed;
+  pointer-events:none;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  z-index:-1;
 }
 </style>
 </head>
-
 <body>
 
 <canvas id="bg"></canvas>
-<div class="overlay" id="overlay"></div>
+<canvas id="chocoRain"></canvas>
+<div id="overlay"></div>
 
 <div class="section">
   <h1>ORBital Chocolate</h1>
-  <div class="glass">A galaxis legcoolabb csokija</div>
+  <div class="glass">Interstellar Flavor Experience</div>
 
   <div class="choco-container">
-    <img src="https://i.imgur.com/3ZQ3Z4C.png" class="choco" id="left" style="left:20%;">
-    <img src="https://i.imgur.com/3ZQ3Z4C.png" class="choco" id="center" style="left:45%;">
-    <img src="https://i.imgur.com/3ZQ3Z4C.png" class="choco" id="right" style="left:70%;">
+    <img src="https://i.imgur.com/3ZQ3Z4C.png" class="choco" id="left" style="left:15%;top:120px;">
+    <img src="https://i.imgur.com/3ZQ3Z4C.png" class="choco" id="center" style="left:42%;top:80px;">
+    <img src="https://i.imgur.com/3ZQ3Z4C.png" class="choco" id="right" style="left:70%;top:140px;">
   </div>
 </div>
 
 <div class="section">
-  <h1>Warp Into Flavor</h1>
+  <h1>Warp Into Sweetness</h1>
 </div>
 
 <script>
-// THREE.JS STARFIELD
+// THREE STARFIELD + WARP
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
-const renderer = new THREE.WebGLRenderer({canvas:document.getElementById('bg')});
-renderer.setSize(window.innerWidth, window.innerHeight);
-camera.position.z = 5;
+const camera = new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,0.1,2000);
+const renderer = new THREE.WebGLRenderer({canvas:document.getElementById("bg")});
+renderer.setSize(window.innerWidth,window.innerHeight);
+camera.position.z=5;
 
-const starsGeometry = new THREE.BufferGeometry();
-const starCount = 6000;
-const positions = [];
-
+const starGeo = new THREE.BufferGeometry();
+const starCount=8000;
+let positions=[];
 for(let i=0;i<starCount;i++){
   positions.push((Math.random()-0.5)*2000);
   positions.push((Math.random()-0.5)*2000);
   positions.push((Math.random()-0.5)*2000);
 }
-
-starsGeometry.setAttribute('position', new THREE.Float32BufferAttribute(positions,3));
-const starsMaterial = new THREE.PointsMaterial({color:0xffffff});
-const starField = new THREE.Points(starsGeometry,starsMaterial);
-scene.add(starField);
+starGeo.setAttribute("position",new THREE.Float32BufferAttribute(positions,3));
+const starMat=new THREE.PointsMaterial({color:0xffffff,size:1});
+const stars=new THREE.Points(starGeo,starMat);
+scene.add(stars);
 
 function animate(){
   requestAnimationFrame(animate);
-  starField.rotation.y += 0.0005;
+  stars.rotation.y+=0.0007;
+  stars.position.z+=0.5;
+  if(stars.position.z>1000) stars.position.z=0;
   renderer.render(scene,camera);
 }
 animate();
 
-window.addEventListener('resize',()=>{
+// RESIZE
+window.addEventListener("resize",()=>{
   renderer.setSize(window.innerWidth,window.innerHeight);
-  camera.aspect = window.innerWidth/window.innerHeight;
+  camera.aspect=window.innerWidth/window.innerHeight;
   camera.updateProjectionMatrix();
 });
 
 // PARALLAX
-document.addEventListener('mousemove',(e)=>{
-  let x = (e.clientX/window.innerWidth-0.5)*2;
-  let y = (e.clientY/window.innerHeight-0.5)*2;
-  gsap.to(".choco",{x:x*50,y:y*50,duration:0.5});
+document.addEventListener("mousemove",(e)=>{
+  let x=(e.clientX/window.innerWidth-0.5)*2;
+  let y=(e.clientY/window.innerHeight-0.5)*2;
+  gsap.to(".choco",{x:x*60,y:y*60,duration:0.5});
 });
 
-// FLOATING CHOCOS
+// FLOATING
 gsap.to("#left",{y:-30,repeat:-1,yoyo:true,duration:2});
-gsap.to("#center",{y:-40,repeat:-1,yoyo:true,duration:2.5});
-gsap.to("#right",{y:-35,repeat:-1,yoyo:true,duration:3});
+gsap.to("#center",{y:-50,repeat:-1,yoyo:true,duration:2.5});
+gsap.to("#right",{y:-40,repeat:-1,yoyo:true,duration:3});
 
-// DISCORD LINK
+// DISCORD WARP
 document.getElementById("center").addEventListener("click",()=>{
-  gsap.to("#center",{scale:5,opacity:0,duration:0.8});
+  gsap.to("#center",{scale:8,opacity:0,rotation:720,duration:1});
+  gsap.to("body",{background:"#fff",duration:1});
   setTimeout(()=>{
     window.location.href="https://discord.gg/zmPAwS2QKH";
-  },800);
+  },1000);
 });
 
-// SCROLL FADE BACKGROUND
+// SCROLL FADE + SPEED BOOST
 window.addEventListener("scroll",()=>{
-  let scrollY = window.scrollY;
-  let overlay = document.getElementById("overlay");
-  overlay.style.opacity = 1 - scrollY/600;
+  let s=window.scrollY;
+  document.getElementById("overlay").style.opacity=1-s/600;
+  stars.rotation.y+=s*0.00002;
 });
+
+// CHOCOLATE RAIN
+const rainCanvas=document.getElementById("chocoRain");
+const ctx=rainCanvas.getContext("2d");
+rainCanvas.width=window.innerWidth;
+rainCanvas.height=window.innerHeight;
+
+let drops=[];
+for(let i=0;i<50;i++){
+  drops.push({
+    x:Math.random()*rainCanvas.width,
+    y:Math.random()*rainCanvas.height,
+    speed:2+Math.random()*3,
+    size:20+Math.random()*20
+  });
+}
+
+function rain(){
+  ctx.clearRect(0,0,rainCanvas.width,rainCanvas.height);
+  ctx.fillStyle="rgba(255,0,200,0.8)";
+  drops.forEach(d=>{
+    ctx.beginPath();
+    ctx.arc(d.x,d.y,d.size/4,0,Math.PI*2);
+    ctx.fill();
+    d.y+=d.speed;
+    if(d.y>rainCanvas.height) d.y=0;
+  });
+  requestAnimationFrame(rain);
+}
+rain();
 </script>
 
 </body>
